@@ -23,15 +23,21 @@ app.post('/todos', (req, res) => {
 
     todo.save().then((doc) => {
         res.send(doc);
-    }, (error) => {
-        res.status(400).send(error);
-        console.log('Error saving todo' + error);
+    }, (err) => {
+        res.status(400).send(err);
+        // console.log('Error saving todo' + error);
     })
 })
 
-app.listen(3000, () => {
-    console.log('listening at port 3000');
-});
+if (!module.parent) {
+    app.listen(3000, () => {
+        console.log('listening at port 3000');
+    });
+}
+
+module.exports = {
+    app
+};
 
 
 
