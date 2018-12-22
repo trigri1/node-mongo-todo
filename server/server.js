@@ -14,6 +14,8 @@ var {
     User
 } = require('./models/user');
 
+const port = process.env.PORT || 3000;
+
 var app = express();
 
 app.use(bodyParser.json());
@@ -28,7 +30,6 @@ app.post('/todos', (req, res) => {
         res.send(doc);
     }, (err) => {
         res.status(400).send(err);
-        // console.log('Error saving todo' + error);
     })
 })
 
@@ -72,46 +73,11 @@ app.get('/todos/:id', (req, res) => {
 
 
 if (!module.parent) {
-    app.listen(3000, () => {
-        console.log('listening at port 3000');
+    app.listen(port, () => {
+        console.log(`listening at port ${port}`);
     });
 }
 
 module.exports = {
     app
 };
-
-
-
-// var newTodo = new Todo({
-//     text: 'Cook dinner',
-// });
-
-// var newTodo = new Todo({
-// text: 'Cook dinner',
-// completed: false,
-// completedAt: 12345
-// });
-
-// var newTodo = new Todo({
-//     text: 'Edit Video',
-// });
-
-// newTodo.save().then((doc) => {
-//     console.log('Saved todo ' + doc);
-// }, (err) => {
-//     console.log('Unable to save ' + err);
-// })
-
-
-
-
-// var newUser = User({
-//     email: 'abc@xyz.com'
-// });
-
-// newUser.save().then((doc) => {
-//     console.log('Saved todo ' + doc);
-// }, (err) => {
-//     console.log('Unable to save ' + err);
-// });
