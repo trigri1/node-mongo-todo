@@ -1,6 +1,9 @@
 //starts using command "npm run test-watch" 
 const expect = require('expect');
 const request = require('supertest');
+const {
+    ObjectID
+} = require('mongodb');
 
 var {
     app
@@ -11,8 +14,10 @@ var {
 } = require('./../models/todo');
 
 var todos = [{
+    _id: new ObjectID(),
     text: 'First test todo'
 }, {
+    _id: new ObjectID(),
     text: '2nd test todo'
 }];
 
@@ -73,9 +78,8 @@ describe('POST/todo', () => {
     });
 });
 
-describe('GET/todos', (done) => {
-
-    it('should get all the todos', () => {
+describe('GET/todos', () => {
+    it('should get all the todos', (done) => {
         request(app)
             .get('/todos')
             .expect(200)
@@ -84,4 +88,29 @@ describe('GET/todos', (done) => {
             })
             .end(done);
     })
+});
+
+describe('GET/todos/:id', () => {
+    it('should retrun one doc with specified id', (done) => {
+        request(app)
+            .get(`/todos/${todos[0]._id.toHexString()}`)
+            .expect(200)
+            .expect((res) => {
+                expect(res.body.todo.text).toBe(todos[0].text);
+            }).end(done);
+    });
+
+    it('should return 404 if todo not found', (done) => {
+
+        request(app).get(`/todos/${new ObjectID().toHexString()}`)
+            .expect(404)
+            .end(done);
+    });
+
+    it('should return 404 if id not valid', (done) => {
+
+        request(app).get(`/todos/123`)
+            .expect(404)
+            .end(done);
+    });
 });
