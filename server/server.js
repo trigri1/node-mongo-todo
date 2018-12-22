@@ -66,10 +66,49 @@ app.get('/todos/:id', (req, res) => {
             message: 'OK',
             todo
         })
-    }).catch((e) => res.status(400).send({
-        status: 0
-    }));
+    }).catch((e) =>
+        res.status(400).send({
+            status: 0
+        }));
 })
+
+app.delete('/todos/:id', (req, res) => {
+
+    console.log('delete ' + id);
+
+    var id = req.params.id;
+
+    console.log('ID => ' + id);
+    if (!ObjectID.isValid(id)) {
+        return res.status(404).send({
+            status: 0,
+            message: 'Invalid Id'
+        });
+    }
+
+    console.log('ID => ' + id);
+
+    Todo.findByIdAndRemove(id).then((todo) => {
+
+        if (!todo) {
+            return res.status(404).send({
+                status: 1,
+                message: 'Id not found'
+            })
+        }
+
+        res.send({
+            status: 1,
+            message: 'OK',
+            todo
+        })
+    }).catch((e) =>
+        res.status(400).send({
+            status: 0
+        }));
+
+
+});
 
 
 if (!module.parent) {
