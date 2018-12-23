@@ -76,23 +76,20 @@ app.get('/todos/:id', (req, res) => {
 
 app.delete('/todos/:id', (req, res) => {
     var id = req.params.id;
-
-    console.log('ID => ' + id);
     if (!ObjectID.isValid(id)) {
         return res.status(404).send({
             status: 0,
             message: 'Invalid Id'
         });
     }
-    Todo.findByIdAndRemove(id).then((todo) => {
 
+    Todo.findByIdAndRemove(id).then((todo) => {
         if (!todo) {
             return res.status(404).send({
                 status: 1,
                 message: 'Id not found'
             })
         }
-
         res.send({
             status: 1,
             message: 'OK',
